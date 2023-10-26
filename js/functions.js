@@ -104,6 +104,8 @@ function generateTxt() {
 
 let selectedImages = [];
 
+document.getElementById('imageInput').addEventListener('change', handleImageSelect, false);
+
 function handleImageSelect(event) {
     selectedImages = [];
     const files = event.target.files;
@@ -154,5 +156,3 @@ function processImages() {
         URL.revokeObjectURL(zipUrl);
     });
 }
-
-document.getElementById('imageInput').addEventListener('change', handleImageSelect, false);
