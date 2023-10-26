@@ -116,3 +116,46 @@ footer p:first-child {
 .fixed-bottom {
     background-color: black;
 }
+
+@media only screen and (max-width: 600px) {
+    .page-main {
+        padding-top: 3em;
+    }
+
+    .banner2 {
+        min-width: 90%;
+        height: 180px;
+        object-fit: contain;
+        POSITION: ABSOLUTE;
+        left: 0px;
+        margin-top: 38px;
+    }
+
+    .banner1 {
+        min-width: 90%;
+        height: 180px;
+        object-fit: contain;
+        POSITION: ABSOLUTE;
+        left: 0px;
+        margin-top: 38px;
+    }
+
+    .espacamentos {
+        margin-bottom: 13em;
+    }
+
+    .imgbg02 {
+        float: right;
+        max-width: 14em;
+        margin-top: -100px;
+    }
+
+    .fixed-bottom {
+        position: relative;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
+        margin-bottom: -15px;
+    }
+}
