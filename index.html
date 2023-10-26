@@ -175,32 +175,25 @@ function processAndDownload() {
     });
 }
 
-function arrayBufferToBase64(buffer) {
-    let binary = '';
-    let bytes = new Uint8Array(buffer);
-    let len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-}
-
 function canvasToBMPDataUrl(canvas) {
     const context = canvas.getContext('2d');
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     const rowBytes = canvas.width * 3;
     const paddingBytes = (4 - (rowBytes % 4)) % 4;
     const totalBytes = (rowBytes + paddingBytes) * canvas.height;
-    const headerSize = 54;
-
-    const buffer = new Uint8Array(headerSize + totalBytes);
-    let offset = 0;
+    const headerSize = 54 + totalBytes; // Atualizamos o tamanho do cabeçalho BMP
 
     // BMP header
+    const buffer = new Uint8Array(headerSize);
+    let offset = 0;
+
     buffer[offset++] = 0x42; // B
     buffer[offset++] = 0x4D; // M
-
-    // ... (restante do código para o cabeçalho BMP)
+    buffer[offset++] = headerSize & 0xFF; // File size
+    buffer[offset++] = (headerSize >> 8) & 0xFF;
+    buffer[offset++] = (headerSize >> 16) & 0xFF;
+    buffer[offset++] = (headerSize >> 24) & 0xFF;
+    // ... (restante do cabeçalho BMP)
 
     // BMP data (pixels)
     for (let y = 0; y < canvas.height; y++) {
@@ -219,8 +212,8 @@ function canvasToBMPDataUrl(canvas) {
         }
     }
 
-    // Return BMP data URL
-    const bmpDataUrl = 'data:image/bmp;base64,' + arrayBufferToBase64(buffer);
+    // Converte para base64
+    const bmpDataUrl = 'data:image/bmp;base64,' + btoa(String.fromCharCode.apply(null, buffer));
     return bmpDataUrl;
 }
         </script>
