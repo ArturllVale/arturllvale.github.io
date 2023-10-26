@@ -110,17 +110,24 @@ function handleImageSelect(event) {
     selectedImages = [];
     const files = event.target.files;
 
-    for (const file of files) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const img = new Image();
-            img.src = reader.result;
-            img.onload = function() {
-                selectedImages.push(img);
+    const promises = Array.from(files).map(file => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const img = new Image();
+                img.src = reader.result;
+                img.onload = function() {
+                    selectedImages.push(img);
+                    resolve();
+                };
             };
-        };
-        reader.readAsDataURL(file);
-    }
+            reader.readAsDataURL(file);
+        });
+    });
+
+    Promise.all(promises).then(() => {
+        console.log('Imagens carregadas:', selectedImages);
+    });
 }
 
 function processImages() {
@@ -156,3 +163,4 @@ function processImages() {
         URL.revokeObjectURL(zipUrl);
     });
 }
+
