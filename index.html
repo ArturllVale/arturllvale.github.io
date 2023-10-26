@@ -170,37 +170,122 @@ function processAndDownload() {
 }
 
 function canvasToBMPDataUrl(canvas) {
-    // Converte um canvas para uma imagem BMP (base64)
-    const imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
-    const header = 'data:image/bmp;base64,';
-    const padding = (4 - (canvas.width * 3) % 4) % 4;
-    const pixels = canvas.width * canvas.height * 3 + canvas.height * padding;
-    const pixelArraySize = pixels + 54;
-    const headerArray = new Uint8Array([
-        0x42, 0x4D,       // BM
-        pixelArraySize & 0xFF, (pixelArraySize >> 8) & 0xFF, (pixelArraySize >> 16) & 0xFF, (pixelArraySize >> 24) & 0xFF, // Tamanho do arquivo
-        0x00, 0x00, 0x00, 0x00, // Reservado
-        0x36, 0x00, 0x00, 0x00, // Offset para dados da imagem
-        0x28, 0x00, 0x00, 0x00, // Tamanho do cabeçalho de informações (40 bytes)
-        canvas.width & 0xFF, (canvas.width >> 8) & 0xFF, (canvas.width >> 16) & 0xFF, (canvas.width >> 24) & 0xFF, // Largura da imagem
-        canvas.height & 0xFF, (canvas.height >> 8) & 0xFF, (canvas.height >> 16) & 0xFF, (canvas.height >> 24) & 0xFF, // Altura da imagem
-        0x01, 0x00,       // Planos de cores
-        0x18, 0x00,       // Bits por pixel (24 bits para RGB)
-        0x00, 0x00, 0x00, 0x00, // Compressão (sem compressão)
-        pixels & 0xFF, (pixels >> 8) & 0xFF, (pixels >> 16) & 0xFF, (pixels >> 24) & 0xFF, // Tamanho da imagem em pixels
-        0x13, 0x0B, 0x00, 0x00, // Resolução horizontal em pixels por metro (2835 ppm)
-        0x13, 0x0B, 0x00, 0x00, // Resolução vertical em pixels por metro (2835 ppm)
-        0x00, 0x00, 0x00, 0x00, // Número de cores na paleta (usando paleta completa)
-        0x00, 0x00, 0x00, 0x00, // Número de cores importantes (0 significa todas)
-    ]);
-    const bmpArray = new Uint8Array(headerArray.length + pixelArraySize);
-    bmpArray.set(headerArray);
-    for (let i = 0; i < pixels; i += 3) {
-        const offset = i * 4 / 3;
-        bmpArray.set([imageData.data[offset + 2], imageData.data[offset + 1], imageData.data[offset]], headerArray.length + i);
+    const context = canvas.getContext('2d');
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const rowBytes = canvas.width * 3;
+    const paddingBytes = (4 - (rowBytes % 4)) % 4;
+    const totalBytes = (rowBytes + paddingBytes) * canvas.height;
+    const headerSize = 54;
+
+    const buffer = new Uint8Array(headerSize + totalBytes);
+    let offset = 0;
+
+    // BMP header
+    buffer[offset++] = 0x42; // B
+    buffer[offset++] = 0x4D; // M
+
+    // File size
+    buffer[offset++] = (totalBytes + headerSize) & 0xFF;
+    buffer[offset++] = ((totalBytes + headerSize) >> 8) & 0xFF;
+    buffer[offset++] = ((totalBytes + headerSize) >> 16) & 0xFF;
+    buffer[offset++] = ((totalBytes + headerSize) >> 24) & 0xFF;
+
+    // Reserved
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+
+    // Pixel data offset
+    buffer[offset++] = headerSize;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+
+    // DIB header size
+    buffer[offset++] = 40;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+
+    // Image width
+    buffer[offset++] = canvas.width & 0xFF;
+    buffer[offset++] = (canvas.width >> 8) & 0xFF;
+    buffer[offset++] = (canvas.width >> 16) & 0xFF;
+    buffer[offset++] = (canvas.width >> 24) & 0xFF;
+
+    // Image height
+    buffer[offset++] = canvas.height & 0xFF;
+    buffer[offset++] = (canvas.height >> 8) & 0xFF;
+    buffer[offset++] = (canvas.height >> 16) & 0xFF;
+    buffer[offset++] = (canvas.height >> 24) & 0xFF;
+
+    // Planes
+    buffer[offset++] = 1;
+    buffer[offset++] = 0;
+
+    // Bits per pixel
+    buffer[offset++] = 24;
+    buffer[offset++] = 0;
+
+    // Compression (none)
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+
+    // Image size
+    buffer[offset++] = totalBytes & 0xFF;
+    buffer[offset++] = (totalBytes >> 8) & 0xFF;
+    buffer[offset++] = (totalBytes >> 16) & 0xFF;
+    buffer[offset++] = (totalBytes >> 24) & 0xFF;
+
+    // Horizontal resolution
+    buffer[offset++] = 0x13;
+    buffer[offset++] = 0x0B;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+
+    // Vertical resolution
+    buffer[offset++] = 0x13;
+    buffer[offset++] = 0x0B;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+
+    // Number of colors in the palette
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+
+    // Number of important colors
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+    buffer[offset++] = 0;
+
+    // BMP data (pixels)
+    for (let y = 0; y < canvas.height; y++) {
+        for (let x = 0; x < canvas.width; x++) {
+            const index = (y * canvas.width + x) * 4;
+            const r = imageData.data[index + 2];
+            const g = imageData.data[index + 1];
+            const b = imageData.data[index];
+            buffer[offset++] = b;
+            buffer[offset++] = g;
+            buffer[offset++] = r;
+        }
+        // Padding bytes
+        for (let p = 0; p < paddingBytes; p++) {
+            buffer[offset++] = 0;
+        }
     }
-    return header + btoa(String.fromCharCode.apply(null, bmpArray));
+
+    // Return BMP data URL
+    const bmpDataUrl = 'data:image/bmp;base64,' + btoa(String.fromCharCode.apply(null, buffer));
+    return bmpDataUrl;
 }
+
 
         </script>
 </body>
