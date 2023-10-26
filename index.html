@@ -6,11 +6,13 @@
     <meta name="description" content="Ferramenta gratuita que auxilia na criação de servidores de ragnarok" />
     <meta name="keywords" content="rathena, ragnarok online,ragnarok script npc, mr tools" />
     <meta name="author" content="Artur Vale | Lumenbr" />
-    <meta name="permissions-policy" content="interest-cohort=()"/>
+    <meta name="permissions-policy" content="interest-cohort=()" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>MR Tools</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+        integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
     <script src="js/functions.js"></script>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -106,18 +108,29 @@
 
         function addFields() {
             let newField = document.createElement('div');
-            newField.innerHTML = '<input type="text" placeholder="from mapname">,<input type="text" placeholder="fromX">,<input type="text" placeholder="fromY">,<input type="text" placeholder="facing">\\tWarp\\t<input type="text" placeholder="warp name">\\t<input type="text" placeholder="spanx">,<input type="text" placeholder="spany">,<input type="text" placeholder="to mapname">,<input type="text" placeholder="toX">,<input type="text" placeholder="toY">';
+            newField.innerHTML = '<input type="text" placeholder="from mapname">, ' +
+                '<input type="text" placeholder="fromX">, ' +
+                '<input type="text" placeholder="fromY">, ' +
+                '<input type="text" placeholder="facing"> ' +
+                'Warp ' +
+                '<input type="text" placeholder="warp name"> ' +
+                '<input type="text" placeholder="spanx">, ' +
+                '<input type="text" placeholder="spany">, ' +
+                '<input type="text" placeholder="to mapname">, ' +
+                '<input type="text" placeholder="toX">, ' +
+                '<input type="text" placeholder="toY">';
+
             document.getElementById('inputForm').appendChild(newField);
         }
 
         function generateFile() {
             let inputs = document.getElementsByTagName('input');
-            for(let i = 0; i < inputs.length; i+=9) {
-                let warpPoint = `${inputs[i].value}, ${inputs[i+1].value}, ${inputs[i+2].value}, ${inputs[i+3].value}   Warp   ${inputs[i+4].value}   ${inputs[i+5].value}, ${inputs[i+6].value}, ${inputs[i+7].value}, ${inputs[i+8].value}`;
+            for (let i = 0; i < inputs.length; i += 9) {
+                let warpPoint = `${inputs[i].value}, ${inputs[i + 1].value}, ${inputs[i + 2].value}, ${inputs[i + 3].value}   Warp   ${inputs[i + 4].value}   ${inputs[i + 5].value}, ${inputs[i + 6].value}, ${inputs[i + 7].value}, ${inputs[i + 8].value}`;
                 warpPoints.push(warpPoint);
             }
 
-            let textFile = new Blob(warpPoints, {type: 'text/plain'});
+            let textFile = new Blob(warpPoints, { type: 'text/plain' });
             let downloadLink = document.createElement("a");
             downloadLink.download = "warppoint.txt";
             downloadLink.href = window.URL.createObjectURL(textFile);
