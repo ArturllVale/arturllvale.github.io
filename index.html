@@ -88,8 +88,7 @@
             <div class="col-md-6">
                 <h3>Gerador de Background</h3>
                 <input type="file" id="imageInput" accept=".jpg, .jpeg, .png" />
-                <button onclick="handleImageSelect()">Selecionar Imagem</button>
-                <button onclick="processImages()">Processar e Baixar .zip</button>
+                <button onclick="processAndDownload()">Processar e Baixar .zip</button>
             </div>
             <div class="col-md-6"></div>
         </div>
@@ -104,8 +103,10 @@
         <script>
            let selectedImage = null;
 
-function handleImageSelect() {
-    const fileInput = document.getElementById('imageInput');
+document.getElementById('imageInput').addEventListener('change', handleImageSelect);
+
+function handleImageSelect(event) {
+    const fileInput = event.target;
     const file = fileInput.files[0];
 
     if (file) {
@@ -114,7 +115,8 @@ function handleImageSelect() {
             const img = new Image();
             img.src = reader.result;
             img.onload = function() {
-                selectedImage = img;
+                const resizedImg = resizeImage(img, 256 * 4, 256 * 3);
+                selectedImage = resizedImg;
                 alert('Imagem selecionada com sucesso!');
             };
         };
@@ -125,23 +127,25 @@ function handleImageSelect() {
     }
 }
 
-function processImages() {
+function resizeImage(img, width, height) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, width, height);
+    return canvas;
+}
+
+function processAndDownload() {
     if (!selectedImage) {
         alert('Por favor, selecione uma imagem.');
         return;
     }
 
     const zip = new JSZip();
-
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = selectedImage.width;
-    canvas.height = selectedImage.height;
-    ctx.drawImage(selectedImage, 0, 0);
-
     const tileSize = 256;
-    const rows = Math.floor(canvas.height / tileSize);
-    const cols = Math.floor(canvas.width / tileSize);
+    const rows = 3;
+    const cols = 4;
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -149,13 +153,12 @@ function processImages() {
             tileCanvas.width = tileSize;
             tileCanvas.height = tileSize;
             const tileCtx = tileCanvas.getContext('2d');
-            tileCtx.drawImage(canvas, col * tileSize, row * tileSize, tileSize, tileSize, 0, 0, tileSize, tileSize);
-            const tileDataUrl = tileCanvas.toDataURL('image/jpeg').split(',')[1];
-            zip.file(`tile_${row}_${col}.jpg`, tileDataUrl, { base64: true });
+            tileCtx.drawImage(selectedImage, col * tileSize, row * tileSize, tileSize, tileSize, 0, 0, tileSize, tileSize);
+            const tileDataUrl = canvasToBMPDataUrl(tileCanvas);
+            zip.file(`tile_${row}_${col}.bmp`, tileDataUrl.split(',')[1], { base64: true });
         }
     }
 
-    // Gera o arquivo ZIP e faz o download
     zip.generateAsync({ type: 'blob' }).then(function(content) {
         const zipUrl = URL.createObjectURL(content);
         const link = document.createElement('a');
@@ -165,6 +168,40 @@ function processImages() {
         URL.revokeObjectURL(zipUrl);
     });
 }
+
+function canvasToBMPDataUrl(canvas) {
+    // Converte um canvas para uma imagem BMP (base64)
+    const imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+    const header = 'data:image/bmp;base64,';
+    const padding = (4 - (canvas.width * 3) % 4) % 4;
+    const pixels = canvas.width * canvas.height * 3 + canvas.height * padding;
+    const pixelArraySize = pixels + 54;
+    const headerArray = new Uint8Array([
+        0x42, 0x4D,       // BM
+        pixelArraySize & 0xFF, (pixelArraySize >> 8) & 0xFF, (pixelArraySize >> 16) & 0xFF, (pixelArraySize >> 24) & 0xFF, // Tamanho do arquivo
+        0x00, 0x00, 0x00, 0x00, // Reservado
+        0x36, 0x00, 0x00, 0x00, // Offset para dados da imagem
+        0x28, 0x00, 0x00, 0x00, // Tamanho do cabeçalho de informações (40 bytes)
+        canvas.width & 0xFF, (canvas.width >> 8) & 0xFF, (canvas.width >> 16) & 0xFF, (canvas.width >> 24) & 0xFF, // Largura da imagem
+        canvas.height & 0xFF, (canvas.height >> 8) & 0xFF, (canvas.height >> 16) & 0xFF, (canvas.height >> 24) & 0xFF, // Altura da imagem
+        0x01, 0x00,       // Planos de cores
+        0x18, 0x00,       // Bits por pixel (24 bits para RGB)
+        0x00, 0x00, 0x00, 0x00, // Compressão (sem compressão)
+        pixels & 0xFF, (pixels >> 8) & 0xFF, (pixels >> 16) & 0xFF, (pixels >> 24) & 0xFF, // Tamanho da imagem em pixels
+        0x13, 0x0B, 0x00, 0x00, // Resolução horizontal em pixels por metro (2835 ppm)
+        0x13, 0x0B, 0x00, 0x00, // Resolução vertical em pixels por metro (2835 ppm)
+        0x00, 0x00, 0x00, 0x00, // Número de cores na paleta (usando paleta completa)
+        0x00, 0x00, 0x00, 0x00, // Número de cores importantes (0 significa todas)
+    ]);
+    const bmpArray = new Uint8Array(headerArray.length + pixelArraySize);
+    bmpArray.set(headerArray);
+    for (let i = 0; i < pixels; i += 3) {
+        const offset = i * 4 / 3;
+        bmpArray.set([imageData.data[offset + 2], imageData.data[offset + 1], imageData.data[offset]], headerArray.length + i);
+    }
+    return header + btoa(String.fromCharCode.apply(null, bmpArray));
+}
+
         </script>
 </body>
 
