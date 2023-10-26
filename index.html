@@ -87,7 +87,8 @@
             <div class="col-md-6">
                 <h3>Gerador de Background</h3>
                 <input type="file" id="imageInput" accept=".jpg, .jpeg, .png" />
-                <button onclick="processImages()">Processar Imagens e Baixar .zip</button>
+                <button onclick="handleImageSelect()">Selecionar Imagem</button>
+                 <button onclick="processImages()">Processar e Baixar .zip</button>
             </div>
             <div class="col-md-6"></div>
         </div>
@@ -102,24 +103,24 @@
         <script>
            let selectedImage = null;
 
-           window.addEventListener('load', () => {
-    document.getElementById('imageInput').addEventListener('change', handleImageSelect, false);
-});
-
-function handleImageSelect(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function() {
-        const img = new Image();
-        img.src = reader.result;
-        img.onload = function() {
-            selectedImage = img;
-        };
-    };
+function handleImageSelect() {
+    const fileInput = document.getElementById('imageInput');
+    const file = fileInput.files[0];
 
     if (file) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const img = new Image();
+            img.src = reader.result;
+            img.onload = function() {
+                selectedImage = img;
+                alert('Imagem selecionada com sucesso!');
+            };
+        };
+
         reader.readAsDataURL(file);
+    } else {
+        alert('Por favor, selecione uma imagem.');
     }
 }
 
@@ -130,29 +131,19 @@ async function processImages() {
     }
 
     const zip = new JSZip();
-    const tileSize = 256;
-    const rows = 3;
-    const cols = 4;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = selectedImage.width;
+    canvas.height = selectedImage.height;
+    ctx.drawImage(selectedImage, 0, 0);
 
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-            const canvas = document.createElement('canvas');
-            canvas.width = tileSize;
-            canvas.height = tileSize;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(selectedImage, -col * tileSize, -row * tileSize);
+    const dataUrl = canvas.toDataURL('image/jpeg');
 
-            const dataUrl = canvas.toDataURL('image/jpeg');
+    const tileImage = await html2canvas(canvas, { useCORS: true }).then(canvas => {
+        return canvas.toDataURL('image/jpeg').split(',')[1];
+    });
 
-            // Converte o canvas de volta para uma imagem usando html2canvas
-            const tileImage = await html2canvas(canvas, { useCORS: true }).then(canvas => {
-                return canvas.toDataURL('image/jpeg').split(',')[1];
-            });
-
-            // Adiciona a nova imagem ao arquivo ZIP
-            zip.file(`tile_${row}_${col}.jpg`, tileImage, { base64: true });
-        }
-    }
+    zip.file('tile.jpg', tileImage, { base64: true });
 
     // Gera o arquivo ZIP e faz o download
     zip.generateAsync({ type: 'blob' }).then(function(content) {
@@ -164,6 +155,7 @@ async function processImages() {
         URL.revokeObjectURL(zipUrl);
     });
 }
+
         </script>
 </body>
 
