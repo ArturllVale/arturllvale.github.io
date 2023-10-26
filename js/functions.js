@@ -37,7 +37,7 @@ $(function () {
 //<!-- Script do CashShop -->
 
     function addBlock() {
-      var container = document.getElementById("container");
+      var container = document.getElementById("cashshop");
       var block = document.createElement("div");
       block.className = "block";
       block.innerHTML = '<select class="tab"><option value="New">New</option><option value="Hot">Hot</option><option value="Limited">Limited</option><option value="Rental">Rental</option><option value="Permanent">Permanent</option><option value="Scrolls">Scrolls</option><option value="Consumables">Consumables</option><option value="Other">Other</option></select><input type="text" placeholder="Item" class="item"><input type="text" placeholder="Price" class="price">';
