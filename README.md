@@ -1,20 +1,15 @@
-# - Repositório PureRag
+# - Repositório MR Tools
 
 ------------
 
-
-- Se deseja criar uma nova conta e jogar no nosso servidor, segue o link:
-[PureRag Cadastro](http://purerag.online "PureRag Cadastro")
+- Se deseja contribuir, envie um Pull e Marque a estrelinha no projeto.
 
 ------------
 
+## - Informações adicionais
+- **Utilizamos JavaScript como linguagem principal**
+- **Sempre free**
+- **2023 - 2024**
 
-## - Informações do Servidor
-- **Pré-Renovação com conteúdos da renovação.**
-- **Level:** 270/120 | *Sem 3ª Classes*.
-- **Drops:** 30% Consumíveis e Equipamentos / 5% Cartas Normais e 0.50% MVP e MiniBoss.
-- **Habilidades Extras e Editadas.**
-- **Modificações em Cartas e Equipamentos.**
-- **Encantamentos e Bônus de Drop Aleatório.**
 
-Mais informações em breve...
+Qualquer problema, só reportar em Issues
