@@ -88,10 +88,9 @@
             </div>
             <!-- Gerador coluna 3 -->
             <div class="col-md-12">
-                <div id="inputForm">
-                    <button onclick="addFields()">Adicionar Warp Point</button>
-                    <button onclick="generateFile()">Gerar warppoint.txt</button>
-                </div>
+                <button onclick="addFields()">Adicionar Campos</button>
+                <div id="inputForm"></div>
+                <button onclick="generateFile()">Gerar Arquivo</button>
             </div>
             <div class="col-md-6"></div>
         </div>
@@ -104,41 +103,42 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
         </script>
     <script type="text/javascript">
-        let warpPoints = [];
-
-        function addFields() {
-            let newField = document.createElement('div');
-            newField.innerHTML = '<input type="text" placeholder="from mapname">, ' +
-                '<input type="text" placeholder="fromX">, ' +
-                '<input type="text" placeholder="fromY">, ' +
-                '<input type="text" placeholder="facing"> ' +
-                'Warp ' +
-                '<input type="text" placeholder="warp name"> ' +
-                '<input type="text" placeholder="spanx">, ' +
-                '<input type="text" placeholder="spany">, ' +
-                '<input type="text" placeholder="to mapname">, ' +
-                '<input type="text" placeholder="toX">, ' +
-                '<input type="text" placeholder="toY">';
-
-            document.getElementById('inputForm').appendChild(newField);
-        }
-
-        function generateFile() {
-    let inputs = document.getElementsByTagName('input');
-    for (let i = 0; i < inputs.length; i += 10) {
-        let warpPoint = `${inputs[i].value}, ${inputs[i + 1].value}, ${inputs[i + 2].value}, ${inputs[i + 3].value}   Warp   ${inputs[i + 4].value}   ${inputs[i + 5].value}, ${inputs[i + 6].value}, ${inputs[i + 7].value}, ${inputs[i + 8].value}, ${inputs[i + 9].value}`;
-        warpPoints.push(warpPoint);
-    }
-
-    let textFile = new Blob(warpPoints, { type: 'text/plain' });
-    let downloadLink = document.createElement("a");
-    downloadLink.download = "warppoint.txt";
-    downloadLink.href = window.URL.createObjectURL(textFile);
-    downloadLink.style.display = "none";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-}
-
+        document.addEventListener("DOMContentLoaded", function() {
+            let warpPoints = [];
+    
+            function addFields() {
+                let newField = document.createElement('div');
+                newField.innerHTML = '<input type="text" placeholder="from mapname">, ' +
+                    '<input type="text" placeholder="fromX">, ' +
+                    '<input type="text" placeholder="fromY">, ' +
+                    '<input type="text" placeholder="facing"> ' +
+                    'Warp ' +
+                    '<input type="text" placeholder="warp name"> ' +
+                    '<input type="text" placeholder="spanx">, ' +
+                    '<input type="text" placeholder="spany">, ' +
+                    '<input type="text" placeholder="to mapname">, ' +
+                    '<input type="text" placeholder="toX">, ' +
+                    '<input type="text" placeholder="toY">';
+    
+                document.getElementById('inputForm').appendChild(newField);
+            }
+    
+            function generateFile() {
+                let inputs = document.getElementsByTagName('input');
+                for (let i = 0; i < inputs.length; i += 10) {
+                    let warpPoint = `${inputs[i].value}, ${inputs[i + 1].value}, ${inputs[i + 2].value}, ${inputs[i + 3].value}   Warp   ${inputs[i + 4].value}   ${inputs[i + 5].value}, ${inputs[i + 6].value}, ${inputs[i + 7].value}, ${inputs[i + 8].value}, ${inputs[i + 9].value}`;
+                    warpPoints.push(warpPoint);
+                }
+    
+                let textFile = new Blob(warpPoints, { type: 'text/plain' });
+                let downloadLink = document.createElement("a");
+                downloadLink.download = "warppoint.txt";
+                downloadLink.href = window.URL.createObjectURL(textFile);
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+            }
+        });
     </script>
 </body>
 
