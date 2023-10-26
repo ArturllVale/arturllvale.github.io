@@ -2,7 +2,7 @@ function addWarpPoint() {
     let table = document.getElementById('warpPointsTable');
     let newRow = table.insertRow();
     newRow.innerHTML = `
-        <td><input type="text" placeholder="Warp Inicial"></td>
+        <td style="width:120px"><input type="text" placeholder="Warp Inicial"></td>
         <td><input type="text" placeholder="X"></td>
         <td><input type="text" placeholder="Y"></td>
         <td><input type="text" placeholder="Nome do Warp"></td>
