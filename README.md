@@ -7,9 +7,9 @@
 ------------
 
 ## - Informações adicionais
+
 - **Utilizamos JavaScript como linguagem principal**
 - **Sempre free**
 - **2023 - 2024**
-
 
 Qualquer problema, só reportar em Issues
