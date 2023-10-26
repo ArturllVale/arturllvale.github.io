@@ -1,8 +1,8 @@
 //<!-- Script do Menu -->
 
-    $(function () {
-        $("#navbar").load("navbar.html");
-    });
+$(function () {
+  $("#navbar").load("../navbar.html");
+});
 
 //<!-- Script do Gerador -->
 
