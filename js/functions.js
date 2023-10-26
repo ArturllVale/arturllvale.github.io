@@ -10,6 +10,12 @@ $(function () {
   $("#header").load("../header.html");
 });
 
+//<!-- Script do footer -->
+
+$(function () {
+  $("#footer").load("../footer.html");
+});
+
 //<!-- Script do Gerador -->
 
 function gerarEsquema() {
