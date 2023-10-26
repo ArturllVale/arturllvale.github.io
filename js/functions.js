@@ -101,3 +101,58 @@ function generateTxt() {
 }
 
 // Função para criar backgrounds
+
+let selectedImages = [];
+
+function handleImageSelect(event) {
+    selectedImages = [];
+    const files = event.target.files;
+
+    for (const file of files) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const img = new Image();
+            img.src = reader.result;
+            img.onload = function() {
+                selectedImages.push(img);
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function processImages() {
+    if (selectedImages.length === 0) {
+        alert('Por favor, selecione uma ou mais imagens.');
+        return;
+    }
+
+    const zip = new JSZip();
+
+    for (let i = 0; i < selectedImages.length; i++) {
+        const canvas = document.createElement('canvas');
+        canvas.width = selectedImages[i].width;
+        canvas.height = selectedImages[i].height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(selectedImages[i], 0, 0);
+
+        const dataUrl = canvas.toDataURL('image/jpeg');
+        zip.file(`image${i + 1}.jpg`, dataUrl.split(',')[1], { base64: true });
+    }
+
+    zip.generateAsync({ type: 'blob' }).then(function(content) {
+        // Cria um objeto URL com o conteúdo do arquivo .zip
+        const zipUrl = URL.createObjectURL(content);
+
+        // Cria um link para o arquivo .zip
+        const link = document.createElement('a');
+        link.href = zipUrl;
+        link.download = 'imagens.zip'; // Nome do arquivo .zip
+        link.click();
+
+        // Revoga o objeto URL após o download para liberar a memória
+        URL.revokeObjectURL(zipUrl);
+    });
+}
+
+document.getElementById('imageInput').addEventListener('change', handleImageSelect, false);
