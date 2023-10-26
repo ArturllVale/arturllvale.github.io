@@ -102,7 +102,9 @@
         <script>
            let selectedImage = null;
 
-document.getElementById('imageInput').addEventListener('change', handleImageSelect, false);
+           window.addEventListener('load', () => {
+    document.getElementById('imageInput').addEventListener('change', handleImageSelect, false);
+});
 
 function handleImageSelect(event) {
     const file = event.target.files[0];
