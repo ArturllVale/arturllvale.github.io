@@ -175,6 +175,16 @@ function processAndDownload() {
     });
 }
 
+function arrayBufferToBase64(buffer) {
+    let binary = '';
+    let bytes = new Uint8Array(buffer);
+    let len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+}
+
 function canvasToBMPDataUrl(canvas) {
     const context = canvas.getContext('2d');
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -210,7 +220,7 @@ function canvasToBMPDataUrl(canvas) {
     }
 
     // Return BMP data URL
-    const bmpDataUrl = 'data:image/bmp;base64,' + btoa(String.fromCharCode.apply(null, buffer));
+    const bmpDataUrl = 'data:image/bmp;base64,' + arrayBufferToBase64(buffer);
     return bmpDataUrl;
 }
         </script>
