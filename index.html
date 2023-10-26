@@ -10,6 +10,7 @@
     <title>MR Tools</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
     <script src="js/functions.js"></script>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -120,7 +121,7 @@ function handleImageSelect(event) {
     }
 }
 
-function processImages() {
+async function processImages() {
     if (!selectedImage) {
         alert('Por favor, selecione uma imagem.');
         return;
@@ -137,14 +138,17 @@ function processImages() {
             canvas.width = tileSize;
             canvas.height = tileSize;
             const ctx = canvas.getContext('2d');
-            ctx.drawImage(selectedImage, col * tileSize, row * tileSize, tileSize, tileSize);
-            
-            // Cria uma nova imagem com os dados do canvas
-            const tileImage = new Image();
-            tileImage.src = canvas.toDataURL('image/jpeg');
+            ctx.drawImage(selectedImage, -col * tileSize, -row * tileSize);
+
+            const dataUrl = canvas.toDataURL('image/jpeg');
+
+            // Converte o canvas de volta para uma imagem usando html2canvas
+            const tileImage = await html2canvas(canvas, { useCORS: true }).then(canvas => {
+                return canvas.toDataURL('image/jpeg').split(',')[1];
+            });
 
             // Adiciona a nova imagem ao arquivo ZIP
-            zip.file(`tile_${row}_${col}.jpg`, tileImage.src.split(',')[1], { base64: true });
+            zip.file(`tile_${row}_${col}.jpg`, tileImage, { base64: true });
         }
     }
 
