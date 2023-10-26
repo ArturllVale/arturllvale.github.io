@@ -113,7 +113,7 @@
         function generateFile() {
             let inputs = document.getElementsByTagName('input');
             for(let i = 0; i < inputs.length; i+=9) {
-                let warpPoint = `${inputs[i].value},${inputs[i+1].value},${inputs[i+2].value},${inputs[i+3].value}\tWarp\t${inputs[i+4].value}\t${inputs[i+5].value},${inputs[i+6].value},${inputs[i+7].value},${inputs[i+8].value}`;
+                let warpPoint = `${inputs[i].value}, ${inputs[i+1].value}, ${inputs[i+2].value}, ${inputs[i+3].value}   Warp   ${inputs[i+4].value}   ${inputs[i+5].value}, ${inputs[i+6].value}, ${inputs[i+7].value}, ${inputs[i+8].value}`;
                 warpPoints.push(warpPoint);
             }
 
