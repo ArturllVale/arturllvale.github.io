@@ -1,0 +1,118 @@
+*body {
+    margin: 0;
+    padding: 0;
+}
+
+.fa-discord {
+    font-size: 26px;
+    line-height: 1.5;
+    padding-left: 10px;
+}
+
+.banner {
+    --bs-gutter-x: 0rem !important;
+}
+
+.banner img {
+    width: 100%;
+    margin-top: 55px;
+}
+
+.page-main {
+    margin-top: -2em;
+    background-color: white !important;
+    border-radius: 30px;
+    padding-top: 6em;
+}
+
+.status-level {
+    max-width: 200px;
+}
+
+.status-point {
+    max-width: 200px;
+}
+
+.menu-cash{
+    max-width: 200px;
+}
+
+.item {
+    max-width: 200px;
+}
+
+.price {
+    max-width: 200px;
+}
+
+.block {
+    display: flex;
+    margin-bottom: 0.3em;
+}
+
+.espacogas {
+    margin-bottom: 1em;
+}
+
+.imgbg01 {
+    float: left;
+    max-width: 18em;
+    margin-top: -30px;
+}
+
+.imgbg02 {
+    float: right;
+    max-width: 18em;
+    margin-top: -100px;
+}
+
+.contornotext {
+    word-wrap: break-word;
+}
+
+.imagem {
+    user-select: none;
+    -webkit-user-drag: none; /* Para navegadores baseados em Webkit (como Chrome e Safari) */
+    -khtml-user-drag: none; /* Para navegadores baseados em KHTML (como Konqueror) */
+    -moz-user-select: none; /* Para navegadores baseados em Gecko (como Firefox) */
+    -ms-user-select: none; /* Para o Internet Explorer */
+}
+
+.banner2 {
+    min-width: 100%;
+    height: 180px;
+    object-fit: none;
+    POSITION: ABSOLUTE;
+    left: 0px;
+    margin-top: 38px;
+}
+
+.espacamentos {
+    margin-bottom: 20em;
+}
+
+footer p {
+    text-align: center;
+    background-color: black;
+    color: white;
+}
+
+footer {
+    
+--bs-gutter-x: 0rem !important;
+    margin-top: 2em;
+}
+
+footer p:first-child {
+    margin-bottom: -25px;
+    padding-top: 20px;
+}
+
+.h3ajuste {
+    margin-bottom: 10px;
+    padding-bottom: -1px;
+}
+
+.fixed-bottom {
+    background-color: black;
+}

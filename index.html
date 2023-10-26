@@ -1,30 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MundoRag</title>
-    <style>
-        h1 {
-            text-align: center;
-        }
-        p {
-            text-align: center;
-        }
-
-        .iframeposition {
-            margin: 0 auto;
-            display: table !important;
-        }
-
-    </style>
+    <meta charset="utf-8" />
+    <meta name="description" content="Ferramenta gratuita que auxilia na criação de servidores de ragnarok" />
+    <meta name="keywords" content="rathena, ragnarok online,ragnarok script npc, mr tools" />
+    <meta name="author" content="Artur Vale | Lumenbr" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MR Tools</title>
+    <script src="js/function.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="css/estilo.css" />
 </head>
+
 <body>
-    <h1>MundoRag 2023</h1>
-    <p>Ainda não temos nada por aqui!</p>
-    <div class="iframeposition">
-        <iframe src="https://giphy.com/embed/11lxCeKo6cHkJy" width="453" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+    <div id="navbar">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+            <div class="container">
+                <span class="navbar-brand mb-0 h1"><i class="fa-solid fa-gear"></i> MR Tools</span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item ms-auto">
+                            <a class="nav-link active" aria-current="page" href="index.html">Início</a>
+                        </li>
+                        <li class="nav-item dropdown ms-auto">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Ferramentas
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#statspoint">Gerador Statspoint</a></li>
+                                <li><a class="dropdown-item" href="#cashshopi">Item no CashShop</a></li>
+                                <li><a class="dropdown-item" href="#">Em breve...</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item ms-auto">
+                            <a class="nav-link" href="#">Downloads</a>
+                        </li>
+                        <li class="nav-item ms-auto">
+                            <a class="nav-link" href="creditos.html">Créditos</a>
+                        </li>
+                        <li class="nav-item ms-auto">
+                            <i class="fa-brands fa-discord"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
+    <div class="container-fluid banner">
+        <img src="img/banner.png" class="img-fluid imagem" alt="">
+    </div>
+    <div class="container page-main">
+        <div class="row">
+            <!-- Gerador de Status Points -->
+            <div class="col-md-6 espacogas">
+                <h3 id="statspoint">Gerador de statpoint.yml</h3>
+                <label for="numLinhas" class="form-label">Level Máximo:</label>
+                <input type="number" class="form-control status-level" id="numLinhas" min="1" value="1" />
+                <br />
+                <label for="numMaximo" class="form-label">Pontos Máximos:</label>
+                <input type="number" class="form-control status-point" id="numMaximo" min="1" value="1" />
+                <br />
+                <button onclick="gerarEsquema()" class="btn btn-primary">Gerar Arquivo</button>
+            </div>
+            <div class="col-md-6">
+                <h3>O que é stats points?</h3>
+                <img src="img/img01.png" alt="" class="imgbg01 imagem">
+                <p class="contornotext">Stats points ou pontos de status são aqueles pontos que você ganha ao passar de level
+                    usados para distribuição de pontos dos seus atributos como força, agilidade, vitalidade, inteligência,
+                    destreza e sorte.
+                </p>
+            </div>
+            <div class="container-fluid espacamentos">
+                <img src="img/banner2.png" class="img-fluid imagem banner2" alt="">
+            </div>
+            <div class="col-md-6">
+                <h3 class="h3ajuste">O que é o Cash Shop?</h3>
+                <img src="img/img02.png" alt="" class="imgbg02 imagem">
+                <p class="contornotext">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut ipsum laoreet, egestas libero ut, 
+                    elementum lorem. Nulla facilisi. Integer molestie viverra nisl vitae rhoncus. Phasellus a urna vel 
+                    augue tristique ornare. Curabitur turpis nunc, efficitur nec sem ac, dignissim sodales ante. Orci 
+                    varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed elementum 
+                    varius nisl a fermentum.</p>
+                    
+            </div>
+            <!-- Gerador de Item do Cashshop 2023 -->
+            <div class="col-md-6">
+                <h3 id="cashshopi" class="h3ajuste">Itens para o Cash Shop 2023</h3>
+                <div id="cashshop">
+                    <div class="block">
+                        <select class="tab form-select menu-cash">
+                            <option value="New">New</option>
+                            <option value="Hot">Hot</option>
+                            <option value="Limited">Limited</option>
+                            <option value="Rental">Rental</option>
+                            <option value="Permanent">Permanent</option>
+                            <option value="Scrolls">Scrolls</option>
+                            <option value="Consumables">Consumables</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="text" placeholder="Item" class="item form-control">
+                        <input type="text" placeholder="Price" class="price form-control">
+                    </div>
+                </div>
+                <button onclick="addBlock()" class="btn btn-success">Adicionar Item</button>
+                <button onclick="generateTxt()" class="btn btn-primary">Gerar Arquivo</button>
+            </div>
+            <!-- Gerador coluna 3 -->
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    <div class="container-fluid espacamentos">
+        <img src="img/banner3.png" class="img-fluid imagem banner2" alt="">
+    </div>
+    <footer class="container-fluid fixed-bottom">
+        <p>Todos os direitos reservados!</p><br>
+        <p>MR Tools 2023</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        //<!-- Script do Menu -->
+
+        $(function () {
+            $("#navbar").load("navbar.html");
+        });
+
+        //<!-- Script do Gerador -->
+
+        function gerarEsquema() {
+            var numLinhas = parseInt(document.getElementById("numLinhas").value);
+            var numMaximo = parseInt(document.getElementById("numMaximo").value);
+            var divisao = Math.floor(numMaximo / numLinhas);
+            var resto = numMaximo % numLinhas;
+            var valorAtual = 0;
+            var texto = "Header:\n  Type: STATPOINT_DB\n  Version: 2\n\nBody:\n";
+
+            for (var i = 0; i < numLinhas; i++) {
+                var linha = divisao + (resto > 0 ? 1 : 0);
+                valorAtual += linha;
+                texto += `  - Level: ${i + 1}\n    Points: ${valorAtual}\n`;
+                resto--;
+            }
+
+            var blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "statpoint.yml");
+        }
+
+        function saveAs(blob, filename) {
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        //<!-- Script do CashShop -->
+
+        function addBlock() {
+            var container = document.getElementById("cashshop");
+            var block = document.createElement("div");
+            block.className = "block";
+            block.innerHTML = '<select class="tab form-select menu-cash"><option value="New">New</option><option value="Hot">Hot</option><option value="Limited">Limited</option><option value="Rental">Rental</option><option value="Permanent">Permanent</option><option value="Scrolls">Scrolls</option><option value="Consumables">Consumables</option><option value="Other">Other</option></select><input type="text" placeholder="Item" class="item form-control"><input type="text" placeholder="Price" class="price form-control">';
+            container.appendChild(block);
+        }
+
+        function generateTxt() {
+            var blocks = document.getElementsByClassName("block");
+            var data = {};
+
+            for (var i = 0; i < blocks.length; i++) {
+                var tab = blocks[i].getElementsByClassName("tab")[0].value;
+                var item = blocks[i].getElementsByClassName("item")[0].value;
+                var price = blocks[i].getElementsByClassName("price")[0].value;
+
+                if (!data[tab]) {
+                    data[tab] = [];
+                }
+
+                data[tab].push({
+                    item: item,
+                    price: price
+                });
+            }
+
+            var txt = 'Body:\n';
+
+            // Sort tabs
+            var tabs = Object.keys(data).sort();
+
+            for (var i = 0; i < tabs.length; i++) {
+                var tab = tabs[i];
+                txt += '  - Tab: ' + tab + '\n    Items:\n';
+
+                for (var j = 0; j < data[tab].length; j++) {
+                    txt += '     - Item: ' + data[tab][j].item + '\n       Price: ' + data[tab][j].price + '\n';
+                }
+            }
+
+            var blob = new Blob([txt], { type: 'text/plain' });
+            var url = URL.createObjectURL(blob);
+
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'itenscashop.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var imagens = document.querySelectorAll('.imagem');
+
+            imagens.forEach(function(imagem) {
+                imagem.addEventListener('contextmenu', function(event) {
+                    event.preventDefault(); // Previne o menu de contexto padrão (clique com o botão direito)
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>
