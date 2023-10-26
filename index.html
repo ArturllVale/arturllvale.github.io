@@ -181,22 +181,20 @@ function canvasToBMPDataUrl(canvas) {
     const rowBytes = canvas.width * 3;
     const paddingBytes = (4 - (rowBytes % 4)) % 4;
     const totalBytes = (rowBytes + paddingBytes) * canvas.height;
-    const headerSize = 54 + totalBytes; // Atualizamos o tamanho do cabeçalho BMP
+    const fileSize = 54 + totalBytes; // Tamanho do arquivo BMP
 
-    // BMP header
-    const buffer = new Uint8Array(headerSize);
-    let offset = 0;
+    // Cabeçalho BMP
+    const buffer = new Uint8Array(fileSize);
 
-    buffer[offset++] = 0x42; // B
-    buffer[offset++] = 0x4D; // M
-    buffer[offset++] = headerSize & 0xFF; // File size
-    buffer[offset++] = (headerSize >> 8) & 0xFF;
-    buffer[offset++] = (headerSize >> 16) & 0xFF;
-    buffer[offset++] = (headerSize >> 24) & 0xFF;
+    buffer[0] = 0x42; // B
+    buffer[1] = 0x4D; // M
+    buffer[2] = fileSize & 0xFF; // Tamanho do arquivo
+    buffer[3] = (fileSize >> 8) & 0xFF;
     // ... (restante do cabeçalho BMP)
 
-    // BMP data (pixels)
-    for (let y = 0; y < canvas.height; y++) {
+    // Dados BMP (pixels)
+    let offset = 54; // Onde os dados dos pixels começam no BMP
+    for (let y = canvas.height - 1; y >= 0; y--) {
         for (let x = 0; x < canvas.width; x++) {
             const index = (y * canvas.width + x) * 4;
             const r = imageData.data[index + 2];
@@ -206,7 +204,7 @@ function canvasToBMPDataUrl(canvas) {
             buffer[offset++] = g;
             buffer[offset++] = r;
         }
-        // Padding bytes
+        // Bytes de preenchimento
         for (let p = 0; p < paddingBytes; p++) {
             buffer[offset++] = 0;
         }
