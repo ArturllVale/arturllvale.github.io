@@ -161,11 +161,6 @@ footer p:first-child {
 }
 
 .fixed-bottom {
-    position: relative !important;
-    bottom: -17px;
-    z-index: 1030;
-}
-
-.fixed-bottom p:nth-child(2) {
-    padding-bottom: 1em;
+    position: static !important;
+    padding-bottom: 1px;
 }
