@@ -86,9 +86,6 @@
             </div>
             <!-- Gerador coluna 3 -->
             <div class="col-md-6">
-                <h3>Gerador de Background</h3>
-                <input type="file" id="imageInput" accept=".jpg, .jpeg, .png" />
-                <button onclick="processAndDownload()">Processar e Baixar .zip</button>
             </div>
             <div class="col-md-6"></div>
         </div>
@@ -99,121 +96,6 @@
     <div id="footer"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-        </script>
-        <script>
-          let selectedImage = null;
-
-document.getElementById('imageInput').addEventListener('change', handleImageSelect);
-
-function handleImageSelect(event) {
-    const fileInput = event.target;
-    const file = fileInput.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const img = new Image();
-            img.src = reader.result;
-            img.onload = function() {
-                const resizedImg = resizeImage(img, 256 * 4, 256 * 3);
-                selectedImage = resizedImg;
-                alert('Imagem selecionada com sucesso!');
-            };
-        };
-
-        reader.readAsDataURL(file);
-    } else {
-        alert('Por favor, selecione uma imagem.');
-    }
-}
-
-function resizeImage(img, maxWidth, maxHeight) {
-    const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
-    const width = img.width * ratio;
-    const height = img.height * ratio;
-
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0, width, height);
-
-    return canvas;
-}
-
-function processAndDownload() {
-    if (!selectedImage) {
-        alert('Por favor, selecione uma imagem.');
-        return;
-    }
-
-    const zip = new JSZip();
-    const tileSize = 256;
-    const rows = 3;
-    const cols = 4;
-
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-            const tileCanvas = document.createElement('canvas');
-            tileCanvas.width = tileSize;
-            tileCanvas.height = tileSize;
-            const tileCtx = tileCanvas.getContext('2d');
-            tileCtx.drawImage(selectedImage, col * tileSize, row * tileSize, tileSize, tileSize, 0, 0, tileSize, tileSize);
-            const tileDataUrl = canvasToBMPDataUrl(tileCanvas);
-            zip.file(`tile_${row}_${col}.bmp`, tileDataUrl.split(',')[1], { base64: true });
-        }
-    }
-
-    zip.generateAsync({ type: 'blob' }).then(function(content) {
-        const zipUrl = URL.createObjectURL(content);
-        const link = document.createElement('a');
-        link.href = zipUrl;
-        link.download = 'tiles.zip'; // Nome do arquivo .zip
-        link.click();
-        URL.revokeObjectURL(zipUrl);
-    });
-}
-
-function canvasToBMPDataUrl(canvas) {
-    const context = canvas.getContext('2d');
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    const rowBytes = canvas.width * 3;
-    const paddingBytes = (4 - (rowBytes % 4)) % 4;
-    const totalBytes = (rowBytes + paddingBytes) * canvas.height;
-    const fileSize = 54 + totalBytes; // Tamanho do arquivo BMP
-
-    // Cabeçalho BMP
-    const buffer = new Uint8Array(fileSize);
-
-    buffer[0] = 0x42; // B
-    buffer[1] = 0x4D; // M
-    buffer[2] = fileSize & 0xFF; // Tamanho do arquivo
-    buffer[3] = (fileSize >> 8) & 0xFF;
-    // ... (restante do cabeçalho BMP)
-
-    // Dados BMP (pixels)
-    let offset = 54; // Onde os dados dos pixels começam no BMP
-    for (let y = canvas.height - 1; y >= 0; y--) {
-        for (let x = 0; x < canvas.width; x++) {
-            const index = (y * canvas.width + x) * 4;
-            const r = imageData.data[index + 2];
-            const g = imageData.data[index + 1];
-            const b = imageData.data[index];
-            buffer[offset++] = b;
-            buffer[offset++] = g;
-            buffer[offset++] = r;
-        }
-        // Bytes de preenchimento
-        for (let p = 0; p < paddingBytes; p++) {
-            buffer[offset++] = 0;
-        }
-    }
-
-    // Converte para base64
-    const bmpDataUrl = 'data:image/bmp;base64,' + btoa(String.fromCharCode.apply(null, buffer));
-    return bmpDataUrl;
-}
         </script>
 </body>
 
