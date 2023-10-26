@@ -160,38 +160,38 @@ footer p:first-child {
     }
 }
 
-.tablewarp:nth-of-type(1) {
+.tablewarp td:nth-of-type(1) {
     width: 120px;
 }
 
-.tablewarp:nth-of-type(2) {
+.tablewarp td:nth-of-type(2) {
     width: 36px;
 }
 
-.tablewarp:nth-of-type(3) {
+.tablewarp td:nth-of-type(3) {
     width: 36px;
 }
 
-.tablewarp:nth-of-type(4) {
+.tablewarp td:nth-of-type(4) {
     width: 90px;
 }
 
-.tablewarp:nth-of-type(5) {
+.tablewarp td:nth-of-type(5) {
     width: 25px;
 }
 
-.tablewarp:nth-of-type(6) {
+.tablewarp td:nth-of-type(6) {
     width: 25px;
 }
 
-.tablewarp:nth-of-type(7) {
+.tablewarp td:nth-of-type(7) {
     width: 120px;
 }
 
-.tablewarp:nth-of-type(8) {
+.tablewarp td:nth-of-type(8) {
     width: 36px;
 }
 
-.tablewarp:nth-of-type(9) {
+.tablewarp td:nth-of-type(9) {
     width: 36px;
 }
