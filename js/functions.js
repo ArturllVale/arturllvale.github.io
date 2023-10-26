@@ -4,6 +4,12 @@ $(function () {
   $("#navbar").load("../navbar.html");
 });
 
+//<!-- Script do header -->
+
+$(function () {
+  $("#header").load("../header.html");
+});
+
 //<!-- Script do Gerador -->
 
 function gerarEsquema() {
